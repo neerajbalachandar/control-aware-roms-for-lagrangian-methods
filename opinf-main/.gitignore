@@ -1,0 +1,61 @@
+# PDFs
+*.pdf
+
+# Built documentation
+docs/_build/
+_autosummaries/
+docs/source/opinf/literature.md
+
+# Extra Python files
+*.py[cod]
+__pycache__/
+.ipynb_checkpoints/
+.pytest_cache/
+.ruff_cache/
+htmlcov/
+.coverage*
+build/
+dist/
+*.eggs/
+*.egg-info/
+.vscode/
+.pypirc
+.tox/
+.idea/
+
+# Extra Matlab files
+*.mat
+*.*~
+html/
+
+# Extra LaTex files
+*.aux
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+
+# Extra Mac files
+*.DS_Store
+
+# Archives and figures
+*.zip
+*.png
+*.jpg
+*.mp4
+*.gif
+*.pptx
+
+# Data files
+*.h5
+*.np[yz]
+
+# Other
+*.swp
+.markdownlint.json
+Notes/
+tests/add_endclause.py
+docs/use_mathjax_shortcuts.py
+*.code-workspace
+.venv/

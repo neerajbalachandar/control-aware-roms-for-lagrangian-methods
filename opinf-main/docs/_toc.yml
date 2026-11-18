@@ -1,0 +1,52 @@
+# Table of contents
+# Learn more at https://jupyterbook.org/customize/toc.html
+
+format: jb-book
+root: source/index.md
+parts:
+  # Introduction / summary, installation, change log, literature, etc.
+  - caption: Operator Inference
+    maxdepth: 1
+    # numbered: 1
+    chapters:
+    - file: source/opinf/intro.ipynb
+    - file: source/opinf/installation.md
+    - file: source/opinf/changelog.md
+    - file: source/opinf/literature.md
+    - file: source/opinf/bibliography.md
+
+  # Complete numerical examples, written in a tutorial style.
+  - caption: Tutorials
+    maxdepth: 1
+    # numbered: 1
+    chapters:
+    - file: source/tutorials/basics.ipynb
+    - file: source/tutorials/inputs.ipynb
+    - file: source/tutorials/lifting.ipynb
+    # - file: source/tutorials/regularization.ipynb
+    - file: source/tutorials/parametric.ipynb
+
+  # API reference via sphinx-autodoc + limited handwritten documentation.
+  - caption: API Reference
+    maxdepth: 1
+    chapters:
+    - file: source/api/main.md
+    - file: source/api/lift.ipynb
+    - file: source/api/pre.ipynb
+    - file: source/api/basis.ipynb
+    - file: source/api/ddt.ipynb
+    - file: source/api/operators.ipynb
+    - file: source/api/lstsq.ipynb
+    - file: source/api/models.md
+    - file: source/api/roms.md
+    - file: source/api/post.md
+    - file: source/api/utils.md
+
+  # Instructions for developers.
+  - caption: Developer Guide
+    maxdepth: 1
+    chapters:
+    - file: source/contributing/how_to_contribute.md
+    - file: source/contributing/testing.md
+    - file: source/contributing/documentation.md
+    - file: source/contributing/notation.md
