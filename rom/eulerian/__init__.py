@@ -1,26 +1,24 @@
 """
-rom.eulerian – Eulerian field reconstruction from Lagrangian vortex-particle data.
+rom.eulerian – Eulerian grid, masking, and vorticity utilities.
 
-This package converts FLOWUnsteady / rVPM particle snapshots (positions,
-circulation vectors, core sizes) into velocity and vorticity fields on a
-fixed Cartesian grid, stored as chunked HDF5 datasets.
-
-Sub-modules
------------
-grid               Fixed 3-D Cartesian grid with optional non-uniform spacing.
-field_reconstructor Velocity evaluation via regularised Biot–Savart kernels.
-vorticity           Curl computation (ω = ∇ × u) on structured grids.
-masking             Fluid-domain masks for solid boundaries.
+Note on Architecture:
+---------------------
+Particle-to-grid evaluation (Biot-Savart summation) is handled directly by
+FLOWUnsteady / rVPM via ``uns.computefluiddomain(pfield, grids)`` during or
+after the simulation in Julia.  This module retains only the post-processing
+utilities needed on the Python/ROM side:
+  - EulerianGrid: Definition and HDF5 serialization of Cartesian grids.
+  - FluidMask: Fluid/solid domain masks (e.g., solid boundary exclusion).
+  - compute_vorticity: Numerical curl evaluation for vorticity recovery
+    from ROM-decoded velocity fields.
 """
 
 from .grid import EulerianGrid
-from .field_reconstructor import FieldReconstructor
-from .vorticity import compute_vorticity
 from .masking import FluidMask
+from .vorticity import compute_vorticity
 
 __all__ = [
     "EulerianGrid",
-    "FieldReconstructor",
-    "compute_vorticity",
     "FluidMask",
+    "compute_vorticity",
 ]

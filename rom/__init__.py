@@ -1,5 +1,19 @@
-# rom – Reduced-order modelling utilities for VarFlExI
-#
-# This top-level package currently contains the ``eulerian`` sub-package,
-# which converts Lagrangian vortex-particle data produced by FLOWUnsteady /
-# rVPM into velocity and vorticity fields on a fixed Cartesian Eulerian grid.
+"""
+rom – Reduced-Order Modeling pipeline for VarFlExI simulation datasets.
+
+Subpackages:
+  - eulerian: Fixed Eulerian grid definition, fluid masking, and discrete curl.
+  - data: HDF5 dataset ingestion, trajectory abstraction, and validation.
+  - basis: State encoding, Proper Orthogonal Decomposition (POD), and rank selection.
+  - opinf: Operator Inference model construction, derivative estimation, training,
+           and persistence.
+"""
+
+from . import basis, data, eulerian, opinf
+
+__all__ = [
+    "basis",
+    "data",
+    "eulerian",
+    "opinf",
+]
