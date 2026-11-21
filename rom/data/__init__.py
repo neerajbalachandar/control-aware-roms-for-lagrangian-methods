@@ -1,15 +1,10 @@
 """
-rom.data – Dataset ingestion, trajectory abstraction, and data validation for VarFlExI.
+rom.data - On-disk trajectory files (one HDF5 file per VarFlExI run).
+
+``TrajectoryWriter`` streams reconstructed snapshots to disk; ``TrajectoryFile``
+gives lazy read access used by the reduced-dataset builder and the evaluation.
 """
 
-from .trajectory import Trajectory
-from .validation import ValidationReport, validate_trajectory, validate_trajectories
-from .dataset_reader import DatasetReader
+from .trajectory_file import TrajectoryFile, TrajectoryWriter, list_trajectory_files
 
-__all__ = [
-    "Trajectory",
-    "ValidationReport",
-    "validate_trajectory",
-    "validate_trajectories",
-    "DatasetReader",
-]
+__all__ = ["TrajectoryFile", "TrajectoryWriter", "list_trajectory_files"]

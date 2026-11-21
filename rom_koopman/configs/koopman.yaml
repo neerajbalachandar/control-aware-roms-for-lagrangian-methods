@@ -1,0 +1,34 @@
+# Koopman ROMs for VarFlExI (see rom_koopman/README.md)
+koopman:
+  # Same reduced state as OpInf (block names from the reduced dataset). Keep it
+  # small for the lifting method: the dictionary has C(r+m+d, d) functions.
+  ranks:
+    fluid: 10
+    structure: 3
+    structure_rate: 3
+  inputs: null            # null = all dataset inputs
+  methods: [edmdc, lifting]
+
+  # Korda-Mezic linear predictor with inputs (control-oriented Koopman model)
+  edmdc:
+    degree: 2             # polynomial observables of total degree <= degree (in x)
+    n_rbf: 0              # extra Gaussian / thin-plate RBF observables (k-means centres)
+    rbf_kind: gaussian
+    delays: 0             # time-delay (Hankel) embedding depth
+    bilinear: true        # add N (u (x) z) terms (Koopman bilinear form)
+    rollout: linear       # linear (pure Koopman predictor) | relift (re-lift every step)
+    ridge: [1.0e-10, 1.0e-8, 1.0e-6, 1.0e-4, 1.0e-2]
+
+  # Mauroy & Goncalves lifting method: identifies the polynomial vector field F(x,u)
+  lifting:
+    deg_F: 2              # degree of the identified vector field
+    deg_basis: 2          # dictionary degree (>= deg_F)
+    # logm(K) needs a principal logarithm: unregularised K often has eigenvalues on the
+    # negative real axis (the code warns). Ridge >= 1e-3 was needed on the synthetic demo.
+    ridge: [1.0e-8, 1.0e-6, 1.0e-4, 1.0e-3, 1.0e-2, 1.0e-1]
+    max_dictionary: 3000  # skip the method if the dictionary would be larger
+    integrator: RK45
+
+  selection_split: val
+  output_map_regularizer: 1.0e-6
+  output_map_quadratic: false

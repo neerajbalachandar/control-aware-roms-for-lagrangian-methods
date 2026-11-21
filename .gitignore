@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+build/
+dist/
+# Large generated artefacts (keep out of git; regenerate with the pipeline)
+/data/
+/artifacts/
+/results/
+*.h5
+!tests/**/*.h5

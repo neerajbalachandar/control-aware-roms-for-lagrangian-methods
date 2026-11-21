@@ -1,0 +1,24 @@
+# Operator Inference ROM for VarFlExI (see rom_opinf/README.md)
+opinf:
+  # Reduced state = truncated, block-scaled POD coordinates of the reduced dataset.
+  # Block names must exist in reduced_dataset.h5 (configs/reduced_dataset.yaml).
+  ranks:
+    fluid: 12            # Eulerian velocity POD modes
+    structure: 4         # plate displacement POD modes
+    structure_rate: 4    # projected plate velocity (same modes) -> 2nd-order structure
+  # c constant | A linear | H quadratic | G cubic | B input | N state-input (bilinear)
+  operators: cAHB
+  form: continuous       # continuous (dx/dt) | discrete (x_{k+1})
+  inputs: null           # null = all dataset inputs, or e.g. [gust_z, control_flap]
+  ddt_order: 4           # finite-difference order for dx/dt (2, 4, 6)
+  use_projected_rates: true
+  # Tikhonov grid: lambda1 -> c, A, B ; lambda2 -> H, G, N
+  lambda1: [1.0e-8, 1.0e-6, 1.0e-4, 1.0e-2, 1.0e-1, 1.0]
+  lambda2: [1.0e-6, 1.0e-4, 1.0e-2, 1.0, 1.0e+2]
+  integrator: RK45       # RK45 | BDF | Radau | LSODA
+  selection_split: val   # regularisation chosen by rollout error on this split
+  output_map_regularizer: 1.0e-6
+  output_map_quadratic: false
+  # Optional: python -m rom_opinf.train ... --rank-sweep
+  rank_sweep:
+    fluid: [4, 8, 12, 16, 24, 32]

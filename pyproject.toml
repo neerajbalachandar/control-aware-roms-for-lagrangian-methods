@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "control-aware-roms-for-lagrangian-methods"
+version = "0.2.0"
+description = "Reduced-order models (Operator Inference, Koopman) for VarFlExI vortex-particle FSI simulations"
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.24", "scipy>=1.10", "h5py>=3.8", "matplotlib>=3.7", "pandas>=1.5", "pyyaml>=6", "opinf==0.6.0"]
+
+[project.optional-dependencies]
+gpu = ["torch>=2.0"]
+test = ["pytest>=7"]
+
+[tool.setuptools.packages.find]
+include = ["rom*", "rom_opinf*", "rom_koopman*"]
+
+[tool.setuptools.package-data]
+rom_opinf = ["configs/*.yaml"]
+rom_koopman = ["configs/*.yaml"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["slow: end-to-end pipeline test (~7 min on CPU)"]
+filterwarnings = ["ignore::DeprecationWarning", "ignore::opinf.errors.OpInfWarning"]

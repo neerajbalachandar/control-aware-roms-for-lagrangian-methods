@@ -1,0 +1,39 @@
+# Stage 2: POD bases + reduced coordinates (scripts/build_reduced_dataset.py)
+# Split by RUN (never by time inside a run). Globs allowed.
+trajectories:
+  train:
+    - data/trajectories/gust_f1p5_A1.h5
+    - data/trajectories/gust_f3p0_A1.h5
+    - data/trajectories/gust_f6p0_A1.h5
+  val:
+    - data/trajectories/gust_f4p5_A1.h5
+  test:
+    - data/trajectories/gust_f2p0_A1p5.h5
+
+time_window:
+  t_start: 0.10      # drop the impulsive-start transient (wake not yet formed) [s]
+  t_end: null
+stride: 1            # use every k-th snapshot (keep identical for all runs; Koopman needs uniform dt)
+
+inputs: all          # or a list of channel names, e.g. [gust_z, control_flap]
+outputs: all
+drop_zero_inputs: true
+
+blocks:
+  fluid:
+    source: field:velocity     # field:velocity | field:vorticity
+    r_max: 60
+    weighting: volume          # energy inner product (trapezoidal node volumes)
+    crop: null                 # optional sub-box {x: [..], y: [..], z: [..]}
+  structure:
+    source: structural:displacement
+    r_max: 12
+    weighting: area            # lumped plate nodal areas
+    rate: true                 # also project the plate velocity -> block 'structure_rate'
+  # Optional extra block: span-wise bound circulation Gamma(y,t) (80 stations)
+  # circulation:
+  #   source: signals:bound_circulation
+  #   r_max: 8
+
+block_size: 32
+memory_limit_gb: 8

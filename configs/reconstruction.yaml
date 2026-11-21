@@ -1,0 +1,45 @@
+# Stage 1: Lagrangian particles -> fixed Eulerian grid (scripts/reconstruct_eulerian.py)
+#
+# ONE grid for ALL runs (POD needs a fixed discretisation). Default: near wake of the
+# VarFlExI cantilever wing (span 0.96 m along +y from the root at y=0, chord 0.24 m,
+# leading edge at x=0), 10 chords downstream, wake rising along the 5 deg freestream.
+# Spacing 0.03 m ~ 1.1 x particle core (sigma ~ 0.026 m in the 09-11 runs).
+grid:
+  bounds:
+    x: [-0.12, 2.28]
+    y: [-0.12, 1.08]
+    z: [-0.30, 0.42]
+  spacing: 0.03            # -> 81 x 41 x 25 = 83,025 nodes  (use `resolution: {x:..,y:..,z:..}` instead if preferred)
+  axis_order: xyz
+
+reconstruction:
+  backend: torch           # torch (GPU/CPU, exact) | numpy (reference, slow) | vic (CPU, FFT, approx.)
+  kernel: gaussianerf      # FLOWVPM default kernel - must match the simulation
+  precision: float32       # torch pair arithmetic (accumulation is float64)
+  device: null             # null -> cuda if available
+  include_freestream: true # add V_inf(x,t) incl. the configured gust (exact VarFlExI model)
+  include_bound_vortex: true   # lifting-line bound vortex from the station history
+  bound_vortex_core: null      # [m]; null -> median particle sigma
+  fields: [velocity, vorticity]
+  store_induced: false
+  far_field:               # lump particles farther than `distance` from the box into `bin`-sized cubes
+    distance: 0.5          # measured on 09-11-momentcons-crm step 599: 7x faster, 4e-5 rel. error
+    bin: 0.1
+  include_static: true     # use *_staticpfield files if present
+
+steps: "1:1:600"           # Julia-like inclusive range; null = every saved particle file
+
+# Inputs u(t) and outputs y(t) stored with every trajectory (see rom/varflexi/signals.py)
+signals:
+  inputs: [gust_x, gust_y, gust_z, "control:*"]
+  outputs:
+    - coupling:lift
+    - coupling:drag
+    - coupling:cm
+    - solid:tip_w_displacement
+    - solid:tip_w_velocity
+    - solid:tip_theta_y_displacement
+    - solid:midspan_w_displacement
+    - probe:probe_1_vz_m_s
+    - probe:probe_2_vz_m_s
+    - probe:probe_3_vz_m_s

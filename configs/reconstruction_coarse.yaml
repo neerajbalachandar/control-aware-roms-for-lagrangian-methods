@@ -1,0 +1,16 @@
+# Fast exploratory grid (~36k nodes; ~3 s/snapshot on an RTX 2000 Ada at 2.8e5 particles)
+grid:
+  bounds: {x: [-0.12, 2.28], y: [-0.12, 1.08], z: [-0.30, 0.42]}
+  spacing: 0.04
+reconstruction:
+  backend: torch
+  kernel: gaussianerf
+  include_freestream: true
+  include_bound_vortex: true
+  fields: [velocity, vorticity]
+  far_field: {distance: 0.5, bin: 0.1}
+steps: null
+signals:
+  inputs: [gust_x, gust_y, gust_z, "control:*"]
+  outputs: [coupling:lift, coupling:drag, coupling:cm, solid:tip_w_displacement, solid:tip_w_velocity,
+            solid:tip_theta_y_displacement, solid:midspan_w_displacement]
